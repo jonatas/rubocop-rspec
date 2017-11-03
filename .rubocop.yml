@@ -36,3 +36,10 @@ RSpec/ExampleLength:
 RSpec/DescribeClass:
   Exclude:
     - spec/project/**/*.rb
+
+RSpec/ContextDescription:
+  Enabled: true
+  Prefix:
+    - when
+    - with
+    - without
