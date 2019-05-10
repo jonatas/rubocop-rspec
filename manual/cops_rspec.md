@@ -1477,6 +1477,86 @@ Enforce that subject is the first definition in the test.
 
 * [http://www.rubydoc.info/gems/rubocop-rspec/RuboCop/Cop/RSpec/LeadingSubject](http://www.rubydoc.info/gems/rubocop-rspec/RuboCop/Cop/RSpec/LeadingSubject)
 
+## RSpec/LeakyConstantDeclaration
+
+Enabled by default | Supports autocorrection
+--- | ---
+Enabled | No
+
+Checks that no class, module, or a constant is declared.
+
+Constants, including classes and modules, when declared in a block
+scope, are defined in global namespace, and leak between examples.
+
+### Examples
+
+#### Constants leak between examples
+
+```ruby
+# bad
+describe SomeClass do
+  OtherClass = Struct.new
+  CONSTANT_HERE = 'is also denied'
+end
+
+# good
+# https://relishapp.com/rspec/rspec-mocks/docs/mutating-constants
+describe SomeClass do
+  before do
+    stub_const('OtherClass', Struct.new)
+    stub_const('CONSTANT_HERE', 'is also denied')
+  end
+end
+```
+```ruby
+# bad
+describe SomeClass do
+  class OtherClass < described_class
+    def do_something
+    end
+  end
+end
+
+# good
+# https://relishapp.com/rspec/rspec-mocks/docs/mutating-constants
+describe SomeClass do
+  before do
+    fake_class = Class.new(described_class) do
+                   def do_something
+                   end
+                 end
+    stub_const('OtherClass', fake_class)
+  end
+end
+```
+```ruby
+# bad
+describe SomeClass do
+  module SomeModule
+    class SomeClass
+      def do_something
+      end
+    end
+  end
+end
+
+# good
+# https://relishapp.com/rspec/rspec-mocks/docs/mutating-constants
+describe SomeClass do
+  before do
+    fake_class = Class.new(described_class) do
+      def do_something
+      end
+    end
+    stub_const('SomeModule::SomeClass', fake_class)
+  end
+end
+```
+
+### References
+
+* [http://www.rubydoc.info/gems/rubocop-rspec/RuboCop/Cop/RSpec/LeakyConstantDeclaration](http://www.rubydoc.info/gems/rubocop-rspec/RuboCop/Cop/RSpec/LeakyConstantDeclaration)
+
 ## RSpec/LetBeforeExamples
 
 Enabled by default | Supports autocorrection

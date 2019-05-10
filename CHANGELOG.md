@@ -6,6 +6,7 @@
 * Fixed `RSpec/ContextWording` missing `context`s with metadata. ([@pirj][])
 * Fix `FactoryBot/AttributeDefinedStatically` not working with an explicit receiver. ([@composerinteralia][])
 * Add `RSpec/Dialect` enforces custom RSpec dialects. ([@gsamokovarov][])
+* Add `RSpec/LeakyConstantDeclaration` cop. ([@jonatas][], [@pirj][])
 
 ## 1.32.0 (2019-01-27)
 
